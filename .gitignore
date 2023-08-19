@@ -1,0 +1,22 @@
+# Python-related
+__pycache__/
+*.py[cod]
+*.sqlite3
+
+# Virtual environment
+venv/
+.env
+
+# IDE-specific
+.vscode/
+.idea/
+
+# Compiled files
+*.pyc
+*.pyo
+
+# Logs
+*.log
+
+# Static files
+staticfiles/

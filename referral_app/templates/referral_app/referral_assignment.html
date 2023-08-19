@@ -1,0 +1,17 @@
+<html>
+<head>
+    <title>Присвоение реферального кода</title>
+</head>
+<body>
+    <h2>Введите чужой инвайт-код</h2>
+    <form method="post" action="{% url 'assign-referral-code' %}">
+        {% csrf_token %}
+        <input type="text" name="referral_code" placeholder="Инвайт-код" required>
+        <button type="submit">Присвоить</button>
+    </form>
+
+    {% if success_message %}
+    <h2>{{ success_message }}</h2>
+    {% endif %}
+</body>
+</html>
