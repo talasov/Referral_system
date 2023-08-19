@@ -3,17 +3,18 @@ import string
 import time
 
 import phonenumbers
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.shortcuts import render
 from django.utils import timezone
 
-from django.urls import reverse
-
-from .models import CustomUser, Referral
-from django.contrib.auth.decorators import login_required
+from .utils import get_or_create_user, generate_invite_code
 
 
 def authorization_page(request):
+    """ Авторизация """
+
     auth_code = None
     phone_number = None
 
@@ -43,6 +44,7 @@ def authorization_page(request):
 
 
 def verification_page(request):
+    """ Верефикация """
     invite_code = None
     phone_number = request.POST.get('phone_number')
     auth_code = request.POST.get('auth_code')
@@ -57,9 +59,8 @@ def verification_page(request):
                 user = get_or_create_user(phone_number)
                 invite_code = generate_invite_code(user)
 
-                if invite_code:
-                    # Перенаправляем на профиль пользователя с помощью URL-имени
-                    return redirect(reverse('user_profile'))
+                # Вход пользователя
+                login(request, user)
 
     context = {
         'invite_code': invite_code,
@@ -69,57 +70,14 @@ def verification_page(request):
     return render(request, 'referral_app/verification.html', context)
 
 
-def get_or_create_user(phone_number):
-    try:
-        return CustomUser.objects.get(phone_number=phone_number)
-    except CustomUser.DoesNotExist:
-        user = CustomUser.objects.create_user(phone_number=phone_number)
-        user.is_verified = True
-        user.save()
-        return user
-
-
-def generate_invite_code(user):
-    if not user.invite_code:
-        invite_code = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(6))
-        user.invite_code = invite_code
-        user.save()
-    return user.invite_code
-
-
-from django.shortcuts import redirect
 @login_required
-def assign_referral_code(request):
-    success_message = None
+def profile_page(request):
+    """ Профиль пользователя """
 
-    if request.method == 'POST':
-        user = request.user
-        referral_code = request.POST.get('referral_code')
-
-        if not referral_code:
-            error_message = 'Требуется указать инвайт-код'
-        else:
-            referred_by_user = CustomUser.objects.filter(invite_code=referral_code).first()
-
-            if not referred_by_user:
-                error_message = 'Указанный инвайт-код не найден'
-            elif Referral.objects.filter(referred_user=user).exists():
-                error_message = 'У вас уже есть реферальный код'
-            elif referred_by_user == user:
-                error_message = 'Вы не можете использовать свой инвайт-код как реферальный'
-            else:
-                Referral.objects.create(referrer=referred_by_user, referred_user=user, referral_code=referral_code)
-                success_message = 'Реферальный код успешно присвоен'
+    user = request.user
 
     context = {
-        'success_message': success_message,
+        'user': user,
     }
 
-    return render(request, 'referral_app/referral_assignment.html', context)
-
-
-
-
-def user_profile(request):
-    user = request.user
-    return render(request, 'referral_app/user_profile.html', {'user': user})
+    return render(request, 'referral_app/user_profile.html', context)

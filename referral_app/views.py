@@ -106,6 +106,8 @@ class VerifyAuthCodeView(APIView):
 
 
 class UserProfileView(APIView):
+    """ Профиль пользователя """
+
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
@@ -117,6 +119,8 @@ class UserProfileView(APIView):
 
 
 class AssignReferralCodeView(APIView):
+    """ Логика реферальной системы """
+
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -141,5 +145,3 @@ class AssignReferralCodeView(APIView):
         Referral.objects.create(referrer=referred_by_user, referred_user=user, referral_code=referral_code)
 
         return Response({'message': 'Реферальный код успешно присвоен'}, status=status.HTTP_201_CREATED)
-
-

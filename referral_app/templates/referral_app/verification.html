@@ -3,17 +3,12 @@
     <title>Верификация</title>
 </head>
 <body>
-    <h2>Введите код авторизации</h2>
-    <form method="post" action="{% url 'verify' %}">
-        {% csrf_token %}
-        <input type="hidden" name="phone_number" value="{{ phone_number }}">
-        <input type="text" name="auth_code" placeholder="Код авторизации" required>
-        <button type="submit">Войти</button>
-    </form>
-
     {% if invite_code %}
-    <h2>Ваш инвайт-код:</h2>
-    <p>{{ invite_code }}</p>
+    <h2>Вам присвоен реферальный код</h2>
+    <p>Ваш реферальный код: {{ invite_code }}</p>
+    <p>Вы успешно верифицированы и сохранены в базе данных.</p>
+    {% else %}
+    <p>Верификация не удалась. Пожалуйста, проверьте введенные данные.</p>
     {% endif %}
 </body>
 </html>

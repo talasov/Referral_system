@@ -4,6 +4,8 @@ from .models import CustomUser
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    """ Вывод всех пользователей кто используем invite_code как свой referral_code """
+
     referred_users = serializers.SerializerMethodField()
 
     class Meta:

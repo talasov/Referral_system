@@ -9,16 +9,12 @@
         {% csrf_token %}
         <input type="text" name="phone_number" placeholder="Номер телефона" required>
         <button type="submit">Получить код</button>
-
-        {% if auth_code %}
-    <h2>Код авторизации:</h2>
-    <p>{{ auth_code }}</p>
-        {% endif %}
     </form>
 
     {% if auth_code %}
+    <h2>Код авторизации: {{ auth_code }}</h2>
     <h2>Введите код авторизации</h2>
-    <form method="post" action="{% url 'verify' %}">
+    <form method="post" action="{% url 'verification' %}">
         {% csrf_token %}
         <input type="text" name="phone_number" value="{{ phone_number }}" readonly>
         <input type="text" name="auth_code" placeholder="Код авторизации" required>
@@ -27,3 +23,5 @@
     {% endif %}
 </body>
 </html>
+
+
