@@ -1,0 +1,157 @@
+{
+	"info": {
+		"_postman_id": "b101fd8d-97b1-4409-8f7c-90f60fe436f5",
+		"name": "referral",
+		"description": "Запросы:  \nПолучения кода для входа (4 цифры)  \nАвторизация и получение invate code  \nПрофиль  \nПрисвоения referral code",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21243274"
+	},
+	"item": [
+		{
+			"name": "authorize ( POST)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"phone_number\": \"+79295245915\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/authorize/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"authorize",
+						""
+					]
+				},
+				"description": "Пользователь отправляет в форме {\"phone_number\": \"your_number\"} номер Проверяется корректность номера телефона и выдаётся рандомный 4ёх значный код жизнь которого 3 минуты"
+			},
+			"response": []
+		},
+		{
+			"name": "verification",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"phone_number\": \"+79295245915\", \"auth_code\": \"9839\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/verify/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"verify",
+						""
+					]
+				},
+				"description": "Если номер телефона и код верный  \nПользователь создаётся в системе, ему присваевается\n\nitinvite_code и выдаётся token авторизации  \nесли пользователь уже был в базе данных выдаётся лишь новый токен"
+			},
+			"response": []
+		},
+		{
+			"name": "profile",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkyNDQ2ODI3LCJqdGkiOiJjYTgzNDg0YWZhYzM0NTk2OGUwNDA4MTdkY2Y0MzgzZiIsInVzZXJfaWQiOjR9.LYyu2ycE_JDspuX44aLLkTnuWt3UxtUvw7mX4pC7WI8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/profile/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"profile",
+						""
+					]
+				},
+				"description": "Профайл пользователя, передаётся JWT токен авторизованного пользователя  \nполучаем данные о нём: нём телефона, Инвайт код, список пользователей(их номера) кто использовал наш инвайд код в своей реферальной ссылке"
+			},
+			"response": []
+		},
+		{
+			"name": "referral-code",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkyNDQ1OTY2LCJqdGkiOiI0MjJlMjgxNDdkOTc0NWRkYmQ0NTgyOTk0ZGUxYTVlMCIsInVzZXJfaWQiOjN9.XSE0gjBEn7T_YmxaerbO9YOSo6KnRCXzpzBdkG1Dse0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"referral_code\": \"uPhkJO\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/assign-referral-code/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"assign-referral-code",
+						""
+					]
+				},
+				"description": "Авторизованный по токену пользователь отправляет запрос на подключение себе referral code если у пользователя ещё referral code не создан, если такой код есть в системе и он пренадлежит не этому же пользователю то ему присваевается referral code."
+			},
+			"response": []
+		}
+	]
+}
