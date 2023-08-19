@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG") == "True"
 
-ALLOWED_HOSTS = ['talasov2017.pythonanywhere.com', 'www.talasov2017.pythonanywhere.com']
+ALLOWED_HOSTS = []
 
 # Application definition
 
