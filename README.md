@@ -33,13 +33,7 @@
 - Django Rest Framework
 - phonenumbers
 - rest_framework_simplejwt
-
-## Установка и запуск
-
-1. Клонируйте репозиторий: `git clone https://github.com/talasov/Referral_system.git`
-2. Установите зависимости: `pip install -r requirements.txt`
-3. Выполните миграции: `python manage.py migrate`
-4. Запустите сервер: `python manage.py runserver`
+- PostgreSQL
 
 ## Запуск в контейнере
 
